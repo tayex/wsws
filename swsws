@@ -1,0 +1,1341 @@
+
+local LocalPlayer = game.Players.LocalPlayer
+
+local Mouse = LocalPlayer:GetMouse()
+
+local RunService = game:GetService("RunService")
+
+local workspace = game:GetService("Workspace")
+
+local Light = game:GetService("Lighting")
+makefolder("CONFIG")
+
+
+if not game:IsLoaded() then
+	game.Loaded:Wait()
+end
+
+-- SILENT + TRACER MADE BY Memelouse#3150
+
+
+
+
+local Yung =
+loadstring(game:HttpGet("https://raw.githubusercontent.com/xwel33/meffsol-remake/main/orbit"))() -- This is not mine
+local Circle2222 = Yung:New3DCircle()
+local legitcolor = Color3.fromRGB(253, 150, 255)
+Circle2222.Visible = false
+Circle2222.ZIndex = 1
+local Chingbing32 = false
+local Chingbing33 = false
+Circle2222.Transparency = 1
+Circle2222.Color = Color3.fromRGB(255, 255, 255)
+Circle2222.Thickness = 1
+--
+--highlight
+local niggacum2 = false
+local niggacumcolorxe2 = Color3.fromRGB(255, 0, 0)
+local niggaculor2 = Color3.fromRGB(255, 0, 0)
+local LocalHL2 = Instance.new("Highlight")
+--
+
+local aiming = {
+targetaim = {
+    enabled = false,
+    toggablexd = false,
+    targeting = false,
+    view = false,
+    chat = false,
+    ben = false,
+    airshotfunpart = "LowerTorso",
+    airshotfun = false,
+    teleportontarget = false,
+    lookat = false,
+    Notificationmode = false,
+    Notificationmodepart = "Roblox",
+    autoshoot = false,
+    autoprediction = false,
+    key = Enum.KeyCode.Q,
+    prediction = 0.13,
+    predictionv2 = 0.13,
+    hitpart = "LowerTorso",
+    hitpart2 = "LowerTorso"
+},
+tracers = {
+    enabled = false,
+    showprediction = false,
+    rainbow = false,
+    thickness = 1.26,
+    colour = Color3.fromRGB(255, 255, 255),
+    from = "Cursor"
+},
+orbit = {
+    enabled = false,
+    visualization = false,
+    flymode = false,
+    flymodeh = 75,
+    vc = Color3.fromRGB(255, 255, 255),
+    speed = 20,
+    distance = 10
+},
+visualization = {
+    part = true,
+    transparency = 0,
+    material = "forcefield",
+    circle = false,
+    forcefield = false,
+    forcefieldmat = "ForceField",
+    forcefieldcol = Color3.fromRGB(253, 150, 255),
+    mode = "Part",
+    partcolour = Color3.fromRGB(255, 255, 255),
+    circlecolour = Color3.fromRGB(255, 255, 255)
+},
+ --Memelouse#3150
+fov = {
+    enabled = false,
+    filled = false,
+    thickness = 2,
+    sides = 350,
+    radius = 50,
+    colour = Color3.fromRGB(255, 255, 255),
+    option = "Circle"
+},
+od = {
+    unlockkoplayer = false,
+    unlockko = false,
+    tpko = false,
+    realodko = false,
+    stompko = false,
+    stomptime = 3
+}
+}
+local Meffsolset = {
+    Loaded = false,
+    Target = {
+        UseMouseNearest = "Mouse",
+        WallCheck = false,
+        Grabbed = false,
+        Knocked = false,
+        UseOldWallCheck = false,
+        UseNewWallCheck = true
+    },
+    TargetGui = {
+        Enabled = false
+    }
+}
+
+local Service =
+    setmetatable(
+    {},
+    {
+        __index = function(t, k)
+            return game:GetService(k)
+        end
+    }
+)
+
+local RunService = Service.RunService
+local Players = Service.Players
+local LocalPlayer = Players.LocalPlayer
+local UIs = Service.UserInputService
+local TweenService = Service.TweenService
+local CurrentCamera = workspace.CurrentCamera
+local Mouse = LocalPlayer:GetMouse()
+local CoreGui = Service.CoreGui
+local GuiInset = Service.GuiService:GetGuiInset()
+
+if
+    not pcall(
+        function()
+            return syn.protect_gui
+        end
+    )
+ then
+    syn = {}
+    syn.protect_gui = function(gui)
+        gui.Parent = CoreGui
+    end
+end
+--Memelouse#3150
+local MainGui = Instance.new("ScreenGui")
+MainGui.Name = "VaultsUI"
+MainGui.Parent = CoreGui
+MainGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+syn.protect_gui(MainGui)
+
+local DrawingFunctions = {
+    NewLine = function(Thickness)
+        local Line = Drawing.new("Line")
+        Line.Visible = true
+        Line.Color = Color3.fromRGB(253, 150, 255)
+        Line.Thickness = 1
+        Line.Transparency = 1
+        Line.ZIndex = 2
+
+        local OutLine = Drawing.new("Line")
+        OutLine.Visible = false
+        OutLine.Color = Color3.fromRGB(0, 0, 0)
+        OutLine.Thickness = 4
+        OutLine.Transparency = 1
+        OutLine.ZIndex = 1
+        return Line, OutLine
+    end,
+    NewCircle = function()
+        local Circle = Drawing.new("Circle")
+        Circle.Transparency = 1
+        Circle.Thickness = 1
+        Circle.ZIndex = 2
+        Circle.Visible = false
+        Circle.Color = Color3.fromRGB(253, 150, 255)
+        Circle.NumSides = 100
+
+        local OutLine = Drawing.new("Circle")
+        OutLine.Visible = false
+        OutLine.Color = Color3.fromRGB(0, 0, 0)
+        OutLine.Transparency = 1
+        OutLine.Thickness = 4
+        OutLine.ZIndex = 1
+        OutLine.NumSides = 100
+        return Circle, OutLine
+    end
+}
+
+local DrawingCircle, OutlineDrawingCircle = DrawingFunctions.NewCircle(1)
+
+local IsNetwork = function(GetPlayer)
+    return GetPlayer and GetPlayer.Character and
+        GetPlayer.Character:FindFirstChild("HumanoidRootPart") ~= nil and
+        GetPlayer.Character:FindFirstChild("Humanoid") ~= nil and
+        GetPlayer.Character:FindFirstChild("Head") ~= nil and
+        true or
+        false
+end
+
+local Meffsolset2 = {
+    Round = function(num, numDecimalPlaces)
+        return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
+    end
+}
+
+local TargetUI = Instance.new("Frame")
+local UICorner = Instance.new("UICorner")
+local Container_2 = Instance.new("Frame")
+local Line_2 = Instance.new("Frame")
+local Profile = Instance.new("ImageButton")
+local HealthBorder = Instance.new("Frame")
+local HealthBar = Instance.new("Frame")
+local UICorner_2 = Instance.new("UICorner")
+local HealthText = Instance.new("TextLabel")
+local HealthIcon = Instance.new("ImageButton")
+local Title_2 = Instance.new("TextLabel")
+local ArmorBorder = Instance.new("Frame")
+local ArmorBar = Instance.new("Frame")
+local UICorner_3 = Instance.new("UICorner")
+local ArmorText = Instance.new("TextLabel")
+local ArmorIcon = Instance.new("ImageButton")
+local UmbraShadow_2 = Instance.new("ImageLabel")
+local AmbientShadow_2 = Instance.new("ImageLabel")
+
+TargetUI.Name = "Target UI"
+TargetUI.Parent = MainGui
+TargetUI.AnchorPoint = Vector2.new(0.5, 0.5)
+TargetUI.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TargetUI.BackgroundTransparency = 0.700
+TargetUI.BorderSizePixel = 0
+TargetUI.Position = UDim2.new(0.504575729, 0, 0.787337661, 0)
+TargetUI.Size = UDim2.new(0, 251, 0, 97)
+TargetUI.Visible = false
+
+UICorner.CornerRadius = UDim.new(0, 4)
+UICorner.Parent = TargetUI
+
+Container_2.Name = "Container"
+Container_2.Parent = TargetUI
+Container_2.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
+Container_2.BackgroundTransparency = 0.700
+Container_2.BorderSizePixel = 0
+Container_2.Position = UDim2.new(0.00973401312, 0, 0.027855942, 0)
+Container_2.Size = UDim2.new(0, 248, 0, 94)
+
+Line_2.Name = "Line"
+Line_2.Parent = Container_2
+Line_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Line_2.BorderSizePixel = 0
+Line_2.Position = UDim2.new(-0.00261220615, 0, -0.00655640941, 0)
+Line_2.Size = UDim2.new(0, 249, 0, 3)
+
+Profile.Name = "Profile"
+Profile.Parent = Container_2
+Profile.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Profile.BackgroundTransparency = 1.000
+Profile.Position = UDim2.new(-0.00427350448, 0, 0.0338983051, 0)
+Profile.Size = UDim2.new(0, 90, 0, 90)
+Profile.AutoButtonColor = false
+Profile.Image = "rbxthumb://type=AvatarHeadShot&id=590180069&w=420&h=420"
+
+HealthBorder.Name = "HealthBorder"
+HealthBorder.Parent = Container_2
+HealthBorder.BackgroundColor3 = Color3.fromRGB(26, 26, 26)
+HealthBorder.BackgroundTransparency = 0.500
+HealthBorder.BorderSizePixel = 0
+HealthBorder.Position = UDim2.new(0.400000006, 0, 0.349999994, 0)
+HealthBorder.Size = UDim2.new(0, 135, 0, 22)
+
+HealthBar.Name = "HealthBar"
+HealthBar.Parent = HealthBorder
+HealthBar.Active = true
+HealthBar.BackgroundColor3 = Color3.fromRGB(7, 215, 0)
+HealthBar.BorderSizePixel = 0
+HealthBar.ClipsDescendants = true
+HealthBar.Position = UDim2.new(0.0220597833, 0, -0.0436026901, 0)
+HealthBar.Size = UDim2.new(1, 0, 1, 0)
+
+UICorner_2.CornerRadius = UDim.new(0, 3)
+UICorner_2.Parent = HealthBar
+
+HealthText.Name = "HealthText"
+HealthText.Parent = HealthBorder
+HealthText.BackgroundColor3 = Color3.fromRGB(118, 118, 118)
+HealthText.BackgroundTransparency = 1.000
+HealthText.Size = UDim2.new(0, 138, 0, 22)
+HealthText.Font = Enum.Font.Roboto
+HealthText.Text = "100"
+HealthText.TextColor3 = Color3.fromRGB(255, 255, 255)
+HealthText.TextSize = 20.000
+
+HealthIcon.Name = "HealthIcon"
+HealthIcon.Parent = HealthBorder
+HealthIcon.BackgroundTransparency = 1.000
+HealthIcon.Position = UDim2.new(0.0900000036, 0, 0.119999997, 0)
+HealthIcon.Size = UDim2.new(0, 15, 0, 15)
+HealthIcon.ZIndex = 2
+HealthIcon.Image = "rbxassetid://3926305904"
+HealthIcon.ImageRectOffset = Vector2.new(964, 444)
+HealthIcon.ImageRectSize = Vector2.new(36, 36)
+
+Title_2.Name = "Title"
+Title_2.Parent = Container_2
+Title_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Title_2.BackgroundTransparency = 1.000
+Title_2.Position = UDim2.new(0.426879644, 0, 0.0496608652, 0)
+Title_2.Size = UDim2.new(0, 132, 0, 25)
+Title_2.Font = Enum.Font.Roboto
+Title_2.Text = "T_4Q (WetAnimeGirls)"
+Title_2.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title_2.TextScaled = true
+Title_2.TextSize = 20.000
+Title_2.TextWrapped = true
+Title_2.TextXAlignment = Enum.TextXAlignment.Left
+
+ArmorBorder.Name = "ArmorBorder"
+ArmorBorder.Parent = Container_2
+ArmorBorder.BackgroundColor3 = Color3.fromRGB(255,255,255)
+ArmorBorder.BackgroundTransparency = 0.500
+ArmorBorder.BorderSizePixel = 0
+ArmorBorder.Position = UDim2.new(0.400000006, 0, 0.649999976, 0)
+ArmorBorder.Size = UDim2.new(0, 135, 0, 22)
+
+ArmorBar.Name = "ArmorBar"
+ArmorBar.Parent = ArmorBorder
+ArmorBar.BackgroundColor3 = Color3.fromRGB(82,151,255)
+ArmorBar.BorderSizePixel = 0
+ArmorBar.Position = UDim2.new(0.0220597833, 0, -0.0436026901, 0)
+ArmorBar.Size = UDim2.new(1, 0, 1, 0)
+
+UICorner_3.CornerRadius = UDim.new(0, 3)
+UICorner_3.Parent = ArmorBar
+
+ArmorText.Name = "ArmorText"
+ArmorText.Parent = ArmorBorder
+ArmorText.BackgroundColor3 = Color3.fromRGB(118, 118, 118)
+ArmorText.BackgroundTransparency = 1.000
+ArmorText.Size = UDim2.new(0, 138, 0, 21)
+ArmorText.Font = Enum.Font.Roboto
+ArmorText.Text = "100"
+ArmorText.TextColor3 = Color3.fromRGB(255, 255, 255)
+ArmorText.TextSize = 20.000
+
+ArmorIcon.Name = "ArmorIcon"
+ArmorIcon.Parent = ArmorBorder
+ArmorIcon.BackgroundTransparency = 1.000
+ArmorIcon.Position = UDim2.new(0.0900000036, 0, 0.119999997, 0)
+ArmorIcon.Size = UDim2.new(0, 15, 0, 15)
+ArmorIcon.ZIndex = 2
+ArmorIcon.Image = "rbxassetid://3926307971"
+ArmorIcon.ImageRectOffset = Vector2.new(164, 284)
+ArmorIcon.ImageRectSize = Vector2.new(36, 36)
+--Memelouse#3150
+UmbraShadow_2.Name = "UmbraShadow"
+UmbraShadow_2.Parent = TargetUI
+UmbraShadow_2.AnchorPoint = Vector2.new(0.5, 0.5)
+UmbraShadow_2.BackgroundTransparency = 1.000
+UmbraShadow_2.BorderSizePixel = 0
+UmbraShadow_2.Position = UDim2.new(0.5, 0, 0.5, 6)
+UmbraShadow_2.Size = UDim2.new(1, 10, 1, 10)
+UmbraShadow_2.ZIndex = 0
+UmbraShadow_2.Image = "rbxassetid://1316045217"
+UmbraShadow_2.ImageColor3 = Color3.fromRGB(0, 0, 0)
+UmbraShadow_2.ImageTransparency = 0.850
+UmbraShadow_2.ScaleType = Enum.ScaleType.Slice
+UmbraShadow_2.SliceCenter = Rect.new(10, 10, 118, 118)
+
+AmbientShadow_2.Name = "AmbientShadow"
+AmbientShadow_2.Parent = TargetUI
+AmbientShadow_2.AnchorPoint = Vector2.new(0.5, 0.5)
+AmbientShadow_2.BackgroundTransparency = 1.000
+AmbientShadow_2.BorderSizePixel = 0
+AmbientShadow_2.Position = UDim2.new(0.5, 0, 0.476000011, 3)
+AmbientShadow_2.Size = UDim2.new(1, 5, 1, 5)
+AmbientShadow_2.ZIndex = 0
+AmbientShadow_2.Image = "rbxassetid://1316045217"
+AmbientShadow_2.ImageColor3 = Color3.fromRGB(0, 0, 0)
+AmbientShadow_2.ImageTransparency = 0.500
+AmbientShadow_2.ScaleType = Enum.ScaleType.Slice
+AmbientShadow_2.SliceCenter = Rect.new(10, 10, 118, 118)
+
+
+
+
+local Players = game:GetService("Players")
+local Workspace = game:GetService("Workspace")
+local GuiService = game:GetService("GuiService")
+local RunService = game:GetService("RunService")
+local Heartbeat = RunService.Heartbeat
+local LocalPlayer = Players.LocalPlayer
+local CurrentCamera = Workspace.CurrentCamera
+local Mouse = LocalPlayer:GetMouse()
+local Drawingnew = Drawing.new
+local Color3fromRGB = Color3.fromRGB
+local Vector2new = Vector2.new
+local GetGuiInset = GuiService.GetGuiInset
+local Randomnew = Random.new
+local mathfloor = math.floor
+local CharacterAdded = LocalPlayer.CharacterAdded
+local CharacterAddedWait = CharacterAdded.Wait
+local WorldToViewportPoint = CurrentCamera.WorldToViewportPoint
+local RaycastParamsnew = RaycastParams.new
+local EnumRaycastFilterTypeBlacklist = Enum.RaycastFilterType.Blacklist
+local Raycast = Workspace.Raycast
+local GetPlayers = Players.GetPlayers
+local Instancenew = Instance.new
+local IsDescendantOf = Instancenew("Part").IsDescendantOf
+local FindFirstChildWhichIsA = Instancenew("Part").FindFirstChildWhichIsA
+local FindFirstChild = Instancenew("Part").FindFirstChild
+local tableremove = table.remove
+local tableinsert = table.insert
+local NeckOffSet = Vector3.new(0,-.5,0)
+local Players = game:GetService("Players")
+local LocalPlayer = game:GetService("Players").LocalPlayer
+local Mouse = LocalPlayer:GetMouse()
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local Camera = game:GetService("Workspace").CurrentCamera
+local connections = getconnections(game:GetService("LogService").MessageOut)
+local localPlayer = game:GetService("Players").LocalPlayer
+local currentCamera = game:GetService("Workspace").CurrentCamera
+local guiService = game:GetService("GuiService")
+local runService = game:GetService("RunService")
+local Players = game:GetService("Players")
+local RS = game:GetService("RunService")
+local WS = game:GetService("Workspace")
+local GS = game:GetService("GuiService")
+local SG = game:GetService("StarterGui")
+local UIS = game:GetService("UserInputService")
+local CurrentCamera = game:GetService("Workspace").CurrentCamera
+local Mouse = game.Players.LocalPlayer:GetMouse()
+local RunService = game:GetService("RunService")
+local Plr = game.Players.LocalPlayer
+local lp = game.Players.LocalPlayer
+local CurrentCamera = game:GetService("Workspace").CurrentCamera
+local Inset = game:GetService("GuiService"):GetGuiInset().Y
+local RunService = game:GetService("RunService")
+local LP = Players.LocalPlayer
+local Mouse = LP:GetMouse()
+local Camera = WS.CurrentCamera
+local GetGuiInset = game:GetService("GuiService"):GetGuiInset().Y
+local userInput = game:GetService('UserInputService')
+local runService = game:GetService('RunService')
+
+
+local getGuiInset = guiService.GetGuiInset
+local Inset = game:GetService("GuiService"):GetGuiInset().Y
+local mouse = localPlayer:GetMouse()
+local Mouse = localPlayer:GetMouse()
+
+local CurrentCamera = game:GetService("Workspace").CurrentCamera
+local LocalMouse = game.Players.LocalPlayer:GetMouse()
+local CurrentCamera = game:GetService "Workspace".CurrentCamera
+local Mouse = game.Players.LocalPlayer:GetMouse()
+local RunService = game:GetService("RunService")
+local Plr = game.Players.LocalPlayer
+local Line = Drawing.new("Line")
+local Inset = game:GetService("GuiService"):GetGuiInset().Y
+local circle = Drawing.new("Circle")
+circle.Color = Color3.fromRGB(255, 255, 255)
+circle.Thickness = 2
+circle.NumSides = 350
+circle.Transparency = 0.6
+circle.Radius = 70
+circle.Visible = false
+circle.Filled = false
+
+local circlev = Drawing.new("Circle")
+circlev.Color = legitcolor
+circlev.Thickness = 2
+circlev.NumSides = 350
+circlev.Transparency = 0.6
+circlev.Radius = 50
+circlev.Visible = false
+ --Memelouse#3150
+circlev.Filled = false
+
+local circlev2 = Drawing.new("Circle")
+circlev2.Color = legitcolor
+circlev2.Thickness = 4
+circlev2.NumSides = 3
+circlev2.Transparency = 0.6
+circlev2.Radius = 50
+circlev2.Visible = false
+circlev2.Filled = false
+
+local line = Drawing.new("Line")
+line.Visible = false
+line.From = Vector2.new(0, 0)
+line.To = Vector2.new(200, 200)
+_G.SpecterL = Color3.fromRGB(253, 150, 255)
+line.Color = _G.SpecterL
+line.Thickness = 1.26
+line.Transparency = 1.
+
+-- not mine lol
+function getClosestPlayerToCursor()
+    local ClosestDistance, ClosestPlayer = math.huge, nil
+    for _, Player in next, game:GetService("Players"):GetPlayers() do
+        local ISNTKNOCKED = Player.Character:FindFirstChild("BodyEffects")["K.O"].Value ~= true
+        local ISNTGRABBED = Player.Character:FindFirstChild("GRABBING_COINSTRAINT") == nil
+
+        if Player ~= game.Players.LocalPlayer then
+            local Character = Player.Character
+            if Character and Character.Humanoid.Health > 1 and ISNTKNOCKED and ISNTGRABBED then
+                local Position, IsVisibleOnViewPort =
+                    CurrentCamera:WorldToViewportPoint(Character.HumanoidRootPart.Position)
+                if IsVisibleOnViewPort then
+                    local Distance =
+                        (Vector2.new(LocalMouse.X, LocalMouse.Y) - Vector2.new(Position.X, Position.Y)).Magnitude
+                    if Distance < ClosestDistance then
+                        ClosestPlayer = Player
+                        ClosestDistance = Distance
+                    end
+                end
+            end
+        end
+    end
+    return ClosestPlayer, ClosestDistance
+end
+
+game:GetService("UserInputService").InputBegan:Connect(
+    function(keyinput, stupid)
+        if keyinput.KeyCode == aiming.targetaim.key then
+            if aiming.targetaim.enabled then
+                aiming.targetaim.targeting = not aiming.targetaim.targeting
+                if aiming.targetaim.targeting then
+                    target = getClosestPlayerToCursor()
+                    targetplr = tostring(target)
+                    localtargetplr = game.Players[targetplr]
+
+                    if aiming.targetaim.chat == true then
+                        local args = {
+                            [1] = "Targeting " .. tostring(targetplr),
+                            [2] = "All"
+                        }
+
+                        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(
+                            unpack(args)
+                        )
+                    end
+
+                    if
+                        aiming.targetaim.Notificationmode == true and
+                            aiming.targetaim.Notificationmodepart == "Roblox"
+                     then
+                        game.StarterGui:SetCore(
+                            "SendNotification",
+                            {
+                                Title = "dicksense.cc",
+                                Text = "Locked : " .. tostring(targetplr),
+                                Icon = "rbxthumb://type=AvatarHeadShot&id=" ..
+                                    game.Players[targetplr].UserId .. "&w=420&h=420",
+                                Duration = 1
+                            }
+                        )
+                    end
+                    if
+                        aiming.targetaim.Notificationmode == true and
+                            aiming.targetaim.Notificationmodepart == "Meff"
+                     then
+                        NotifyLib.prompt("♠", "Locked: " .. tostring(targetplr), 0)
+                    end
+                    if aiming.targetaim.toggablexd == false then
+                        aiming.targetaim.toggablexd = true
+                    end
+                    if aiming.targetaim.view == true then
+                        if game.Players[targetplr].Character:FindFirstChild("Humanoid") then
+                            CurrentCamera.CameraSubject = game.Players[targetplr].Character.Humanoid
+                        end
+                    end
+
+                    if aiming.targetaim.ben == true then
+                        local benlocked = Instance.new("Sound")
+                        benlocked.Name = "e"
+                        benlocked.Volume = aiming.targetaim.benvolume
+                        benlocked.SoundId = "rbxassetid://6518811702"
+                        benlocked.Parent = game:GetService("SoundService")
+                        benlocked.Playing = true
+                    end
+                    if aiming.targetaim.airshotfun == true then
+                        if
+                            game.Players[targetplr].Character.Humanoid.FloorMaterial ==
+                                Enum.Material.Air and
+                                game.Players[targetplr].Character.Humanoid.Jump == true
+                         then
+                            aiming.targetaim.hitpart = aiming.targetaim.airshotfunpart
+                        else
+                            aiming.targetaim.hitpart = aiming.targetaim.hitpart2
+                        end
+                    end
+                    if niggacum2 == true and targetplr then
+                        LocalHL2.Parent = game.Players[targetplr].Character
+                        LocalHL2.FillColor = niggaculor2
+                        LocalHL2.OutlineColor = niggacumcolorxe2
+                        LocalHL2.FillTransparency = 0.2
+                        LocalHL2.OutlineTransparency = 0.1
+                    else
+                        LocalHL2.Parent = game.CoreGui
+                    end
+
+
+                    if aiming.targetaim.teleportontarget == true then
+                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame =
+                            CFrame.new(
+                            game.Players[targetplr].Character.HumanoidRootPart.CFrame.X,
+                            game.Players[targetplr].Character.HumanoidRootPart.CFrame.Y,
+                            game.Players[targetplr].Character.HumanoidRootPart.CFrame.Z
+                        )
+                    end
+                    if aiming.visualization.forcefield == true then
+                        local humanoid = game:GetService("Players")[targetplr].Character.Humanoid
+
+                        if humanoid.RigType == Enum.HumanoidRigType.R15 then
+                            game.Players[targetplr].Character.LeftHand.Material = "ForceField"
+                            game.Players[targetplr].Character.RightHand.Material = "ForceField"
+                            game.Players[targetplr].Character.LeftLowerArm.Material = "ForceField"
+                            game.Players[targetplr].Character.RightLowerArm.Material = "ForceField"
+                            game.Players[targetplr].Character.LeftUpperArm.Material = "ForceField"
+                            game.Players[targetplr].Character.RightUpperArm.Material = "ForceField"
+                            game.Players[targetplr].Character.LeftFoot.Material = "ForceField"
+                            game.Players[targetplr].Character.RightFoot.Material = "ForceField"
+                            game.Players[targetplr].Character.LeftLowerLeg.Material = "ForceField"
+                            game.Players[targetplr].Character.RightLowerLeg.Material = "ForceField"
+                            game.Players[targetplr].Character.UpperTorso.Material = "ForceField"
+                            game.Players[targetplr].Character.LowerTorso.Material = "ForceField"
+                            game.Players[targetplr].Character.LeftUpperLeg.Material = "ForceField"
+                            game.Players[targetplr].Character.RightUpperLeg.Material = "ForceField"
+                            game.Players[targetplr].Character.Head.Material = "ForceField"
+                        end
+                    end
+                    if aiming.visualization.forcefield == true then
+                        local humanoid = game:GetService("Players").LocalPlayer.Character.Humanoid
+
+                        if humanoid.RigType == Enum.HumanoidRigType.R15 then
+                            _G.colorbody1111 = game.Players[targetplr].Character.LeftHand.Color
+                            _G.colorbody1121 = game.Players[targetplr].Character.RightHand.Color
+                            _G.colorbody211 = game.Players[targetplr].Character.LeftLowerArm.Color
+                            _G.colorbody311 = game.Players[targetplr].Character.RightLowerArm.Color
+                            _G.colorbody411 = game.Players[targetplr].Character.LeftUpperArm.Color
+                            _G.colorbody511 = game.Players[targetplr].Character.RightUpperArm.Color
+                            _G.colorbody611 = game.Players[targetplr].Character.LeftFoot.Color
+                            _G.colorbody711 = game.Players[targetplr].Character.RightFoot.Color
+                            _G.colorbody811 = game.Players[targetplr].Character.LeftLowerLeg.Color
+                            _G.colorbody911 = game.Players[targetplr].Character.RightLowerLeg.Color
+                            _G.colorbody1011 = game.Players[targetplr].Character.UpperTorso.Color
+                            _G.colorbody1111 = game.Players[targetplr].Character.LowerTorso.Color
+                            _G.colorbody1211 = game.Players[targetplr].Character.LeftUpperLeg.Color
+                            _G.colorbody1311 = game.Players[targetplr].Character.RightUpperLeg.Color
+                            _G.colorbody1411 = game.Players[targetplr].Character.Head.Color
+                            game.Players[targetplr].Character.LeftHand.Color =
+                                aiming.visualization.forcefieldcol
+                            game.Players[targetplr].Character.RightHand.Color =
+                                aiming.visualization.forcefieldcol
+                            game.Players[targetplr].Character.LeftLowerArm.Color =
+                                aiming.visualization.forcefieldcol
+                            game.Players[targetplr].Character.RightLowerArm.Color =
+                                aiming.visualization.forcefieldcol
+                            game.Players[targetplr].Character.LeftUpperArm.Color =
+                                aiming.visualization.forcefieldcol
+                            game.Players[targetplr].Character.RightUpperArm.Color =
+                                aiming.visualization.forcefieldcol
+                            game.Players[targetplr].Character.LeftFoot.Color =
+                                aiming.visualization.forcefieldcol
+                            game.Players[targetplr].Character.RightFoot.Color =
+                                aiming.visualization.forcefieldcol
+                            game.Players[targetplr].Character.LeftLowerLeg.Color =
+                                aiming.visualization.forcefieldcol
+                            game.Players[targetplr].Character.RightLowerLeg.Color =
+                                aiming.visualization.forcefieldcol
+                            game.Players[targetplr].Character.UpperTorso.Color =
+                                aiming.visualization.forcefieldcol
+                            game.Players[targetplr].Character.LowerTorso.Color =
+                                aiming.visualization.forcefieldcol
+                            game.Players[targetplr].Character.LeftUpperLeg.Color =
+                                aiming.visualization.forcefieldcol
+                            game.Players[targetplr].Character.RightUpperLeg.Color =
+                                aiming.visualization.forcefieldcol
+                            game.Players[targetplr].Character.Head.Color =
+                                aiming.visualization.forcefieldcol
+                        end
+                    end
+
+              
+
+                   
+
+                    if targetplr ~= nil and aiming.visualization.mode == "Ball2" then
+                        local ipar2 = Instance.new("Part", game.Workspace)
+                        ipar2.Name = "uwu2"
+                        ipar2.Anchored = true
+                        ipar2.CanCollide = false
+                        ipar2.Transparency = aiming.visualization.transparency
+                        ipar2.Parent = game.Workspace
+                        ipar2.Shape = Enum.PartType.Ball
+                        ipar2.Size = Vector3.new(10, 7, 20)
+                        ipar2.Color = legitcolor
+                        ipar2.Material = aiming.visualization.material
+                        spawn(
+                            function()
+                                game:GetService("RunService").Stepped:Connect(
+                                    function()
+                                        ipar2.Position =
+                                            game.Players[targetplr].Character.HumanoidRootPart.Position +
+                                            (game.Players[targetplr].Character.LowerTorso.Velocity *
+                                                aiming.targetaim.prediction)
+                                    end
+                                )
+                            end
+                        )
+                    end
+
+                    if targetplr ~= nil and aiming.visualization.mode == "Block" then
+                        local ipar3 = Instance.new("Part", game.Workspace)
+                        ipar3.Name = "uwu3"
+                        ipar3.Anchored = true
+                        ipar3.CanCollide = false
+                        ipar3.Transparency = aiming.visualization.transparency
+                        ipar3.Parent = game.Workspace
+                        ipar3.Shape = Enum.PartType.Block
+                        ipar3.Size = Vector3.new(6, 6, 6)
+                        ipar3.Color = legitcolor
+                        ipar3.Material = aiming.visualization.material
+                        spawn(
+                            function()
+                                game:GetService("RunService").Stepped:Connect(
+                                    function()
+                                        ipar3.Position =
+                                            game.Players[targetplr].Character.HumanoidRootPart.Position +
+                                            (game.Players[targetplr].Character.LowerTorso.Velocity *
+                                                aiming.targetaim.prediction)
+                                    end
+                                )
+                            end
+                        )
+                    end
+                     --Memelouse#3150
+                    if targetplr ~= nil and aiming.visualization.mode == "Cylinder" then
+                        local ipar7 = Instance.new("Part", game.Workspace)
+                        ipar7.Name = "uwu4"
+                        ipar7.Anchored = true
+                        ipar7.CanCollide = false
+                        ipar7.Transparency = aiming.visualization.transparency
+                        ipar7.Parent = game.Workspace
+                        ipar7.Shape = Enum.PartType.Cylinder
+                        ipar7.Size = Vector3.new(3, 6, 3)
+                        ipar7.Color = legitcolor
+                        ipar7.Material = aiming.visualization.material
+                        spawn(
+                            function()
+                                game:GetService("RunService").Stepped:Connect(
+                                    function()
+                                        ipar7.Position =
+                                            game.Players[targetplr].Character.HumanoidRootPart.Position +
+                                            (game.Players[targetplr].Character.LowerTorso.Velocity *
+                                                aiming.targetaim.prediction)
+                                    end
+                                )
+                            end
+                        )
+                    end
+                    if aiming.tracers.rainbow == true then
+                        spawn(
+                            function()
+                                for i = 0, 1, 0.001 do
+                                    line.Color = Color3.fromHSV(i, 1, 1)
+                                    task.wait()
+                                end
+                            end
+                        )
+                    end
+
+                    if aiming.orbit.enabled == true and aiming.targetaim.targeting then
+                        spawn(
+                            function()
+                                repeat
+                                    task.wait()
+
+                                    for i = 0, 360, aiming.orbit.speed do
+                                        if aiming.targetaim.targeting then
+                                            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame =
+                                                CFrame.new(
+                                                game.Players[targetplr].Character.HumanoidRootPart.Position
+                                            ) *
+                                                CFrame.Angles(0, math.rad(i), 0) *
+                                                CFrame.new(aiming.orbit.distance, 0, 0)
+                                            task.wait()
+                                        end
+                                    end
+                                until game.Players[targetplr].Character.Humanoid.health < 1 or
+                                    aiming.orbit.enabled == false or
+                                    aiming.targetaim.targeting == false
+                            end
+                        )
+                    end
+                elseif not aiming.targetaim.targeting then
+                    if aiming.targetaim.chat == true then
+                        local args = {
+                            [1] = "Untargeting " .. tostring(targetplr),
+                            [2] = "All"
+                        }
+
+                        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(
+                            unpack(args)
+                        )
+                    end
+                    if
+                        aiming.targetaim.Notificationmode == true and
+                            aiming.targetaim.Notificationmodepart == "Roblox"
+                     then
+                        game.StarterGui:SetCore(
+                            "SendNotification",
+                            {
+                                Title = "dicksense.cc",
+                                Text = "Unlocked",
+                                Icon = "",
+                                Duration = 1
+                            }
+                        )
+                    end
+                    if
+                        aiming.targetaim.Notificationmode == true and
+                            aiming.targetaim.Notificationmodepart == "Meff"
+                     then
+                        NotifyLib.prompt("♠", "Unlocked", 0)
+                    end
+                    if aiming.targetaim.toggablexd == true then
+                        aiming.targetaim.toggablexd = false
+                    end
+                    if aiming.targetaim.view == true then
+                        CurrentCamera.CameraSubject = game.Players.LocalPlayer.Character.Humanoid
+                    end
+
+                    if aiming.visualization.mode == "Cylinder" then
+                        local vvv = game:GetService("Workspace").uwu4
+                        vvv:Destroy()
+                    end
+
+               
+                    if aiming.visualization.mode == "Ball2" then
+                        local vvv = game:GetService("Workspace").uwu2
+                        vvv:Destroy()
+                    end
+                    if aiming.visualization.mode == "Block" then
+                        local vvv = game:GetService("Workspace").uwu3
+                        vvv:Destroy()
+                    end
+                    if
+                        aiming.orbit.flymode == true and aiming.targetaim.toggablexd == false and
+                            aiming.targetaim.enabled == true
+                     then
+                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame =
+                            CFrame.new(
+                            game.Players[targetplr].Character.HumanoidRootPart.CFrame.X,
+                            game.Players[targetplr].Character.HumanoidRootPart.CFrame.Y,
+                            game.Players[targetplr].Character.HumanoidRootPart.CFrame.Z
+                        )
+                        game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.Velocity =
+                            game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame.lookVector *
+                            0
+                        game:GetService("RunService").Stepped:wait()
+                    end
+                    if
+                        niggacum2 and aiming.targetaim.targeting == false and
+                            aiming.targetaim.toggablexd == false
+                     then
+                        LocalHL2.Parent = game.CoreGui
+                    end
+                    if aiming.visualization.forcefield == true then
+                        local humanoid = game:GetService("Players")[targetplr].Character.Humanoid
+
+                        if humanoid.RigType == Enum.HumanoidRigType.R15 then
+                            game.Players[targetplr].Character.LeftHand.Material = "Plastic"
+                            game.Players[targetplr].Character.RightHand.Material = "Plastic"
+                            game.Players[targetplr].Character.LeftLowerArm.Material = "Plastic"
+                            game.Players[targetplr].Character.RightLowerArm.Material = "Plastic"
+                            game.Players[targetplr].Character.LeftUpperArm.Material = "Plastic"
+                            game.Players[targetplr].Character.RightUpperArm.Material = "Plastic"
+                            game.Players[targetplr].Character.LeftFoot.Material = "Plastic"
+                            game.Players[targetplr].Character.RightFoot.Material = "Plastic"
+                            game.Players[targetplr].Character.LeftLowerLeg.Material = "Plastic"
+                            game.Players[targetplr].Character.RightLowerLeg.Material = "Plastic"
+                            game.Players[targetplr].Character.UpperTorso.Material = "Plastic"
+                            game.Players[targetplr].Character.LowerTorso.Material = "Plastic"
+                            game.Players[targetplr].Character.LeftUpperLeg.Material = "Plastic"
+                            game.Players[targetplr].Character.RightUpperLeg.Material = "Plastic"
+                            game.Players[targetplr].Character.Head.Material = "Plastic"
+                        end
+                    end
+                    if aiming.visualization.forcefield == true then
+                        local humanoid = game:GetService("Players").LocalPlayer.Character.Humanoid
+
+                        if humanoid.RigType == Enum.HumanoidRigType.R15 then
+                            game.Players[targetplr].Character.LeftHand.Color = _G.colorbody1111
+                            game.Players[targetplr].Character.RightHand.Color = _G.colorbody1121
+                            game.Players[targetplr].Character.LeftLowerArm.Color = _G.colorbody211
+                            game.Players[targetplr].Character.RightLowerArm.Color = _G.colorbody311
+                            game.Players[targetplr].Character.LeftUpperArm.Color = _G.colorbody411
+                            game.Players[targetplr].Character.RightUpperArm.Color = _G.colorbody511
+                            game.Players[targetplr].Character.LeftFoot.Color = _G.colorbody611
+                            game.Players[targetplr].Character.RightFoot.Color = _G.colorbody711
+                            game.Players[targetplr].Character.LeftLowerLeg.Color = _G.colorbody811
+                            game.Players[targetplr].Character.RightLowerLeg.Color = _G.colorbody911
+                            game.Players[targetplr].Character.UpperTorso.Color = _G.colorbody1011
+                            game.Players[targetplr].Character.LowerTorso.Color = _G.colorbody1111
+                            game.Players[targetplr].Character.LeftUpperLeg.Color = _G.colorbody1211
+                            game.Players[targetplr].Character.RightUpperLeg.Color = _G.colorbody1311
+                            game.Players[targetplr].Character.Head.Color = _G.colorbody1411
+                        end
+                    end
+                    if aiming.targetaim.ben == true then
+                        local benunlocked = Instance.new("Sound")
+                        benunlocked.Name = "Penis"
+                        benunlocked.Volume = aiming.targetaim.benvolume
+                        benunlocked.SoundId = "rbxassetid://6518811702"
+                        benunlocked.Parent = game:GetService("SoundService")
+                        benunlocked.Playing = true
+                    end
+                end
+            end
+        end
+    end
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+local mt = getrawmetatable(game)
+                local old = mt.__namecall
+                setreadonly(mt, false)
+                mt.__namecall =
+                    newcclosure(
+                    function(...)
+                        local args = {...}
+                        if
+                            targetplr ~= nil and aiming.targetaim.enabled and targetplr and
+                                aiming.targetaim.targeting == true and
+                                aiming.targetaim.enabled == true and
+                                getnamecallmethod() == "FireServer" and
+                                args[2] == "UpdateMousePos"
+                         then
+                            args[3] =
+                                game.Players[targetplr].Character[aiming.targetaim.hitpart].Position +
+                                (game.Players[targetplr].Character.LowerTorso.Velocity * aiming.targetaim.prediction)
+                            return old(unpack(args))
+                        end
+                        return old(...)
+                    end
+                )
+
+                --// main Code
+
+                spawn(
+                    function()
+                        game:GetService("RunService").Stepped:Connect(
+                            function()
+                                --- fov
+                                spawn(
+                                    function()
+                                        circle.Position = Vector2.new(LocalMouse.X, LocalMouse.Y + 35)
+                                    end
+                                )
+
+                                spawn(
+                                    function()
+                                        if aiming.fov.option == "Circle" then
+                                            aiming.fov.side = 350
+                                            circle.NumSides = 350
+                                            aiming.fov.side = 350
+                                        elseif aiming.fov.option == "Hexagon" then
+                                            aiming.fov.side = 6
+                                            circle.NumSides = 6
+                                            aiming.fov.side = 6
+                                        elseif aiming.fov.option == "Square" then
+                                            aiming.fov.side = 4
+                                            circle.NumSides = 4
+                                            aiming.fov.side = 4
+                                        else
+                                        end
+                                    end
+                                )
+
+                                spawn(
+                                    function()
+                                        if aiming.fov.enabled == true then
+                                            circle.Visible = true
+                                        else
+                                            circle.Visible = false
+                                        end
+                                    end
+                                )
+
+                                spawn(
+                                    function()
+                                        circle.Color = aiming.fov.colour
+                                    end
+                                )
+
+                                spawn(
+                                    function()
+                                        circle.Filled = aiming.fov.filled
+                                    end
+                                )
+
+                                spawn(
+                                    function()
+                                        circle.Radius = aiming.fov.radius
+                                    end
+                                )
+
+                                spawn(
+                                    function()
+                                        circle.Thickness = aiming.fov.thickness
+                                    end
+                                )
+
+                                spawn(
+                                    function()
+                                        line.Thickness = aiming.tracers.thickness
+                                    end
+                                )
+
+                                --- targetaim
+
+                                spawn(
+                                    function()
+                                        if aiming.targetaim.autoprediction == true then
+                                            local pingvalue =
+                                                game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString(
+
+                                            )
+                                            local split = string.split(pingvalue, "(")
+                                            local ping = tonumber(split[1])
+                                            -- u can change these (i stole them from .gg/sets)
+                                            if ping > 150 then
+                                                aiming.targetaim.prediction = 0
+                                            elseif ping > 140 then
+                                                aiming.targetaim.prediction = 0.165773
+                                            elseif ping > 130 then
+                                                aiming.targetaim.prediction = 0.1223333
+                                            elseif ping > 120 then
+                                                aiming.targetaim.prediction = 0.143765
+                                            elseif ping > 110 then
+                                                aiming.targetaim.prediction = 0.1455
+                                            elseif ping > 100 then
+                                                aiming.targetaim.prediction = 0.130340
+                                            elseif ping > 90 then
+                                                aiming.targetaim.prediction = 0.136
+                                            elseif ping > 80 then
+                                                aiming.targetaim.prediction = 0.1347
+                                            elseif ping > 70 then
+                                                aiming.targetaim.prediction = 0.119
+                                            elseif ping > 60 then
+                                                aiming.targetaim.prediction = 0.12731
+                                            elseif ping > 50 then
+                                                aiming.targetaim.prediction = 0.127668
+                                            elseif ping > 40 then
+                                                aiming.targetaim.prediction = 0.125
+                                            end
+                                        end
+                                    end
+                                )
+                                spawn(
+                                    function()
+                                        if aiming.tracers.rainbow == true then
+                                        else
+                                            line.Color = aiming.tracers.colour
+                                        end
+                                    end
+                                )
+
+                                spawn(
+                                    function()
+                                        if
+                                            aiming.targetaim.enabled and aiming.targetaim.targeting and
+                                                aiming.tracers.enabled == true
+                                         then
+                                            if aiming.tracers.showprediction == false then
+                                                local plrp =
+                                                    CurrentCamera:WorldToViewportPoint(
+                                                    game.Players[targetplr].Character[aiming.targetaim.hitpart].Position
+                                                )
+                                                local headt =
+                                                    CurrentCamera:WorldToViewportPoint(
+                                                    game.Players.LocalPlayer.Character.Head.Position
+                                                )
+                                                local torsot =
+                                                    CurrentCamera:WorldToViewportPoint(
+                                                    game.Players.LocalPlayer.Character.UpperTorso.Position
+                                                )
+                                                local penist =
+                                                    CurrentCamera:WorldToViewportPoint(
+                                                    game.Players.LocalPlayer.Character.LowerTorso.Position
+                                                )
+                                                local Gunt =
+                                                    CurrentCamera:WorldToViewportPoint(
+                                                    game.Players.LocalPlayer.Character.RightHand.Position
+                                                )
+                                                local mouset =
+                                                    CurrentCamera:WorldToViewportPoint(LocalMouse.Hit.Position)
+
+                                                line.Visible = true
+
+                                                if aiming.tracers.from == "Penis" then
+                                                    line.From = Vector2.new(penist.X, penist.Y)
+                                                    line.To = Vector2.new(plrp.X, plrp.Y)
+                                                end
+
+                                                if aiming.tracers.from == "Gun" then
+                                                    line.From = Vector2.new(Gunt.X, Gunt.Y)
+                                                    line.To = Vector2.new(plrp.X, plrp.Y)
+                                                end
+
+                                                if aiming.tracers.from == "Head" then
+                                                    line.From = Vector2.new(headt.X, headt.Y)
+                                                    line.To = Vector2.new(plrp.X, plrp.Y)
+                                                end
+
+                                                if aiming.tracers.from == "Torso" then
+                                                    line.From = Vector2.new(torsot.X, torsot.Y)
+                                                    line.To = Vector2.new(plrp.X, plrp.Y)
+                                                end
+
+                                                if aiming.tracers.from == "Cursor" then
+                                                    line.From = Vector2.new(mouset.X, mouset.Y)
+                                                    line.To = Vector2.new(plrp.X, plrp.Y)
+                                                end
+                                            else
+                                                local plrp =
+                                                    CurrentCamera:WorldToViewportPoint(
+                                                    game.Players[targetplr].Character[aiming.targetaim.hitpart].Position +
+                                                        (game.Players[targetplr].Character[aiming.targetaim.hitpart].Velocity *
+                                                            aiming.targetaim.prediction)
+                                                )
+                                                local headt =
+                                                    CurrentCamera:WorldToViewportPoint(
+                                                    game.Players.LocalPlayer.Character.Head.Position
+                                                ) +
+                                                    (game.Players[targetplr].Character.Head.Velocity *
+                                                        aiming.targetaim.prediction)
+                                                local torsot =
+                                                    CurrentCamera:WorldToViewportPoint(
+                                                    game.Players.LocalPlayer.Character.UpperTorso.Position +
+                                                        (game.Players[targetplr].Character.UpperTorso.Velocity *
+                                                            aiming.targetaim.prediction)
+                                                )
+                                                local penist =
+                                                    CurrentCamera:WorldToViewportPoint(
+                                                    game.Players.LocalPlayer.Character.LowerTorso.Position +
+                                                        (game.Players[targetplr].Character.LowerTorso.Velocity *
+                                                            aiming.targetaim.prediction)
+                                                )
+                                                local Gunt =
+                                                    CurrentCamera:WorldToViewportPoint(
+                                                    game.Players.LocalPlayer.Character.RightHand.Position +
+                                                        (game.Players[targetplr].Character.RightHand.Velocity *
+                                                            aiming.targetaim.prediction)
+                                                )
+                                                local mouset =
+                                                    CurrentCamera:WorldToViewportPoint(LocalMouse.Hit.Position)
+
+                                                line.Visible = true
+
+                                                if aiming.tracers.from == "Penis" then
+                                                    line.From = Vector2.new(penist.X, penist.Y)
+                                                    line.To = Vector2.new(plrp.X, plrp.Y)
+                                                end
+
+                                                if aiming.tracers.from == "Gun" then
+                                                    line.From = Vector2.new(Gunt.X, Gunt.Y)
+                                                    line.To = Vector2.new(plrp.X, plrp.Y)
+                                                end
+
+                                                if aiming.tracers.from == "Head" then
+                                                    line.From = Vector2.new(headt.X, headt.Y)
+                                                    line.To = Vector2.new(plrp.X, plrp.Y)
+                                                end
+
+                                                if aiming.tracers.from == "Torso" then
+                                                    line.From = Vector2.new(torsot.X, torsot.Y)
+                                                    line.To = Vector2.new(plrp.X, plrp.Y)
+                                                end
+
+                                                if aiming.tracers.from == "Cursor" then
+                                                    line.From = Vector2.new(mouset.X, mouset.Y)
+                                                    line.To = Vector2.new(plrp.X, plrp.Y)
+                                                end
+                                            end
+                                        else
+                                            line.Visible = false
+                                        end
+                                    end
+                                )
+                                if
+                                    aiming.od.realodko and aiming.targetaim.targeting and
+                                        aiming.targetaim.enabled == true
+                                 then
+                                    if game.Players[targetplr].Character.Humanoid.health < 1 then
+                                        game:GetService("ReplicatedStorage").MainEvent:FireServer(
+                                            "Reload",
+                                            game:GetService("Players").LocalPlayer.Character:FindFirstChildWhichIsA(
+                                                "Tool"
+                                            )
+                                        )
+                                    end
+                                end
+                                if
+                                    aiming.od.unlockko and aiming.targetaim.targeting and
+                                        aiming.targetaim.enabled == true
+                                 then
+                                    if game.Players[targetplr].Character.Humanoid.health < 1 then
+                                        aiming.targetaim.targeting = false
+                                        line.Visible = false
+                                        aiming.targetaim.toggablexd = false
+                                        CurrentCamera.CameraSubject = game.Players.LocalPlayer.Character.Humanoid
+                                        if aiming.visualization.mode == "Cylinder" then
+                                            local vvv = game:GetService("Workspace").uwu4
+                                            vvv:Destroy()
+                                        end
+
+                                        if aiming.visualization.mode == "Ball" then
+                                            local vvv = game:GetService("Workspace").uwu
+                                            vvv:Destroy()
+                                        end
+
+                                        if aiming.visualization.mode == "Ball2" then
+                                            local vvv = game:GetService("Workspace").uwu2
+                                            vvv:Destroy()
+                                        end
+                                        if aiming.visualization.mode == "Block" then
+                                            local vvv = game:GetService("Workspace").uwu3
+                                            vvv:Destroy()
+                                        end
+                                        if niggacum2 then
+                                            LocalHL2.Parent = game.CoreGui
+                                        end
+                                    end
+                                end
+                                if aiming.od.tpko == true then
+                                    if game.Players[targetplr].Character.Humanoid.health < 0.99 then
+                                        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame =
+                                            game.Players[targetplr].Character.LowerTorso.CFrame
+                                    end
+                                end
+
+                                if
+                                    aiming.targetaim.targeting == true and aiming.targetaim.enabled == true and
+                                        aiming.orbit.enabled == true and
+                                        aiming.orbit.visualization == true
+                                 then
+                                    Circle2222.Color = aiming.orbit.vc
+                                    Circle2222.Visible = true
+                                    Circle2222.Radius = aiming.orbit.distance
+                                    Circle2222.Position = game.Players[targetplr].Character.HumanoidRootPart.Position
+                                else
+                                    Circle2222.Visible = false
+                                end
+
+                                if aiming.visualization.mode == "Circle" then
+                                    if aiming.targetaim.targeting and aiming.targetaim.enabled == true then
+                                        local narcan =
+                                            CurrentCamera:WorldToViewportPoint(
+                                            game.Players[targetplr].Character.HumanoidRootPart.Position
+                                        )
+                                        circlev.Position = Vector2.new(narcan.X, narcan.Y)
+                                        circlev.Transparency = aiming.visualization.transparency
+                                        circlev.Visible = true
+                                    else
+                                        circlev.Visible = false
+                                    end
+                                end
+                                if aiming.visualization.mode == "Triangle" then
+                                    if aiming.targetaim.targeting and aiming.targetaim.enabled == true then
+                                        local narcan =
+                                            CurrentCamera:WorldToViewportPoint(
+                                            game.Players[targetplr].Character.HumanoidRootPart.Position
+                                        )
+                                        circlev2.Position = Vector2.new(narcan.X, narcan.Y)
+                                        circlev2.Transparency = aiming.visualization.transparency
+                                        circlev2.Visible = true
+                                    else
+                                        circlev2.Visible = false
+                                    end
+                                end
+                                if
+                                    aiming.targetaim.autoshoot and aiming.targetaim.targeting and
+                                        aiming.targetaim.enabled == true
+                                 then
+                                    mouse1click()
+                                end
+                            end
+                        )
+                    end
+                )
+
+                -- shit auto stomp srry
+                spawn(
+                    function()
+                        while task.wait() do
+                            if aiming.targetaim.targeting and aiming.targetaim.enabled and aiming.od.stompko == true then
+                                if game.Players[targetplr].Character.Humanoid.health < 7 then
+                                    if aiming.od.stompko == true then
+                                        spawn(
+                                            function()
+                                                wait(aiming.od.stomptime)
+                                                local args = {
+                                                    [1] = "Stomp"
+                                                }
+
+                                                game:GetService("ReplicatedStorage").MainEvent:FireServer(unpack(args))
+                                            end
+                                        )
+                                    end
+                                end
+                            end
+                        end
+                    end
+                )
